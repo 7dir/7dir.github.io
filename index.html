@@ -29,8 +29,9 @@ navigator.geolocation.watchPosition(
     var map = new mapboxgl.Map({
     container: 'map', // container id
     style: 'mapbox://styles/mapbox/streets-v9', //stylesheet location
-    center: [-74.50, 40], // starting position
-    zoom: 9 // starting zoom
+//     center: [-74.50, 40], // starting position
+    center: [long, lat], // starting position
+    zoom: 11 // starting zoom
 });
 
     map.on('load', function () {
@@ -45,17 +46,17 @@ navigator.geolocation.watchPosition(
                     "coordinates": [-77.03238901390978, 38.913188059745586]
                 },
                 "properties": {
-                    "title": "Mapbox DC",
+                    "title": "Беседка на набережной",
                     "icon": "monument"
                 }
             }, {
                 "type": "Feature",
                 "geometry": {
                     "type": "Point",
-                    "coordinates": [-122.414, 37.776]
+                    "coordinates": [long-1.4, lat-7.76]
                 },
                 "properties": {
-                    "title": "Mapbox SF",
+                    "title": "Заводь SF",
                     "icon": "harbor"
                 }
             }]
