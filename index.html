@@ -1,208 +1,38 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- <link rel="stylesheet" href="css/ansi.css" type="text/css" media="all" />
-
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
-  <script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-  <script src="js/jqconsole.js"></script>
-  <link href="css/opal_irb_jqconsole.css" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
-  <link rel="stylesheet" href="http://codemirror.net/lib/codemirror.css"/>
-  <link rel="stylesheet" href="css/show-hint.css"/>
-  <script src="http://codemirror.net/lib/codemirror.js"></script>
-  <script src="js/show-hint.js"></script>
-  <script src="js/anyword-hint.js"></script>
-  <script type="text/javascript" src="http://codemirror.net/keymap/emacs.js"></script>
-  <script src="http://codemirror.net/mode/ruby/ruby.js"></script>
-  <script src="compiled/app-embeddable.js"></script> -->
-
-  <title>New Tab</title>
-  <script src="../js/aframe.min.js"></script>
-  <!-- <script src="../scripts/aframe-bmfont-text-component.js"></script> -->
-  <!-- <script src="../scripts/aframe-redux-component.js"></script> -->
-  <script src="../js/kframe.min.js"></script>
-  <script src="../js/aframe-physics-system.min.js"></script>
-  <!-- <script src="../js/aframe-keyboard-controls.min.js"></script> -->
-
-  <script src="../js/aframe-htmltexture-component.js"></script>
-  <!-- <script src="../js/set-image.js"></script> -->
-  <!-- <script src="../js/update-raycaster.js"></script> -->
-  <script src="../js/aframe-mouse-cursor-component.min.js"></script>
-  <script src="../js/aframe-bmfont-text-component.min.js"></script>
-  <script src="../js/droid_sans_mono_regular.typeface.js"></script>
-
-  <script src="../js/jquery-2.2.4.min.js"></script>
-  <script src="../js/reactrb-express.js"></script>
-  <script src="../js/clock.rb" type="text/ruby"></script>
-  <script src="../js/newtab.rb" type="text/ruby"></script>
-
-  <!-- <script src="../js/sidey.min.js"></script> -->
-  <script src="../js/modernizr-custom.js"></script>
-
-  <script src="../js/js-offcanvas.pkgd.min.js"></script>
-
-  <script src="../scripts/newtab.js"></script>
-
-  <link rel="stylesheet" href="../styles/newtab.css" />
-  <link rel="stylesheet" href="../css/js-offcanvas.css" />
-  <link rel="stylesheet" href="../css/font-awesome.min.css" />
-  <!-- <link rel="stylesheet" href="../css/sidey.min.css" /> -->
+    <meta charset='utf-8' />
+    <title></title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.28.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.28.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
 </head>
-  <!-- <body> -->
-  <body class="sidey-content">
-    <!-- stats  -->
-    <a-scene  fog="type: linear; color: #AAB; far: 30; near: 0"
-              inspector="url: ../js/aframe-inspector.min.js"
-              physics="debug: true">
+<body>
 
-    <a-assets>
-      <script id="block_tab" type="text/x-nunjucks-template">
-        {% for x in range(1, 6) %}
-          {% for y in range(1, 4) %}
-            <a-entity template="src: block_tab.template; type: handlebars; data: block_tab-data"
-                      data-position="{{ x * 3 }} {{ y * 4 }} 0"></a-entity>
-          {% endfor %}
-        {% endfor %}
-      </script>
-    </a-assets>
+<div id='map'></div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiamVzc3RlbGZvcmQiLCJhIjoiY2l3M3d6OTlrMDA0aTJ6cXNraHByMzdiZyJ9.MAfasjh0CP0D6_OHAYAGaw';
+var map = new mapboxgl.Map({
+    container: 'map', // container id
+    style: 'mapbox://styles/mapbox/streets-v9', //stylesheet location
+    center: [-74.50, 40], // starting position
+    zoom: 9 // starting zoom
+});
 
-    <a-assets>
-      <script id="block_tab2" type="text/x-nunjucks-template">
+navigator.geolocation.watchPosition(
+  function(position) {
+    var long = position.coords.longitude;
+    var lat = position.coords.latitude;
+    map.setCenter([long, lat]);
+  },
+  console.error.bind(console),
+  {enableHighAccuracy: true}
+);
+</script>
 
-        {% for x in range(1, 6) %}
-          {% for y in range(1, 4) %}
-            <a-plane color="#3F51B5" height="2" width="2.3" position="{{ x * 3 }} {{ y * 4 }} 0">
-              {% for ite in [{ title: "foo", id: 1 }, { title: "bar", id: 2}] %}
-                <a-entity text="text: {{ ite.title }}; font: Droid Sans Mono; size: 0.7;" position="-1.0 .7 .1" color="black"></a-entity>
-              {% endfor %}
-            </a-plane>
-          {% endfor %}
-        {% endfor %}
-      </script>
-    </a-assets>
-
-    <!-- bookmarks -->
-    <a-entity id='bookmarks2' template="src: #block_tab2" position="-8 -3 -9"></a-entity>
-
-
-    <a-assets>
-      <img id="highlight1" src="../images/radial-highlight.png">
-      <img id="shadow3" src="../images/radial-shadow-3.png">
-    </a-assets>
-
-    <!-- floor -->
-    <a-plane static-body
-       position="0 -1.5 0"
-       rotation="-90 0 0"
-       height="100" width="100"
-       color="#CCC"
-    ></a-plane>
-
-    <!-- physics -->
-    <a-box dynamic-body color="red" physics="mass: 1.4;" position="4 4 -8" rotation="13 45 45"></a-box>
-
-    <!-- bookmarks -->
-    <a-entity rotation="0 90 0">
-      <a-entity id='bookmarks' template="src: #block_tab" position="-8 -3 -10"></a-entity>
-      <a-entity id='bookmarks_text' text="text: Вкладки; font: Droid Sans Mono; size: 0.7;" position="-6 -1.3 -10" color="black"></a-entity>
-    </a-entity>
-
-    <a-entity rotation="0 0 0">
-      <a-plane color="#CCC" height="2" width="3" position="10 0 -7">
-        <a-entity position="-1.3 .1 .1" bmfont-text="text: tre; color: black;"></a-entity>
-      </a-plane>
-    </a-entity>
-
-    <a-entity rotation="0 -90 0">
-      <a-plane color="#CCC" height="2" width="3" position="10 0 -7">
-        <a-entity position="-1.3 .1 .1" bmfont-text="text: tre; color: black;"></a-entity>
-      </a-plane>
-    </a-entity>
-
-    <!-- <a-entity text="text: WhatsUP; bevelEnabled: false;       bevelThickness:		12;      curveSegments:		12;      font:		helvetiker;      height:		0.05;      size:		0.5; style:		normal;"></a-entity> -->
-    <a-sky color="#AAB"></a-sky>
-
-    <a-entity camera look-controls wasd-controls="acceleration: 200; fly: false;" mouse-cursor>
-      <!-- keyboard-controls -->
-    <!-- <a-entity camera universal-controls kinematic-body jump-ability="enableDoubleJump: true; distance: 3;" position="0 2.2 8"> -->
-    <!-- <a-animation attribute="position" dur="2000" easing="linear" to="0 1.6 -1"></a-animation> -->
-    <a-cursor id="cursor"
-        animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"
-        animation__fusing="property: fusing; startEvents: fusing; from: 1 1 1; to: 0.1 0.1 0.1; dur: 1500"
-        event-set__1="_event: mouseenter; color: springgreen"
-        event-set__2="_event: mouseleave; color: black"
-        raycaster="objects: .link"></a-cursor>
-    </a-entity>
-<!--
-    <a-entity geometry="primitive: box; depth: 2"
-              material="color: #6173F4; opacity: 0.8"
-              physics="mass: 5; boundingBox: 1 1 2"
-              explode="on: physics-collide; intensity: 3"
-              position="-1.3 .7 0"
-              ></a-entity>
- -->
-  </a-scene>
-
-<!-- <a class="js-offcanvas-trigger" data-offcanvas-trigger="off-canvas" href="#off-canvas" >
-☰
-</a>
-<aside class="js-offcanvas" data-offcanvas-options='{ "modifiers": "right,overlay" }' id="off-canvas" role="complementary">
-asdasdasdas
-asdasdasdas
-asdasdasdas
-</aside>
--->
-
-  		<main class="c-offcanvas-content-wrap container" role="main">
-        <div class="o-wrapper ">
-          <a class="js-offcanvas-trigger" data-offcanvas-trigger="left" href="#left" id="left_menu">
-            <i class="fa fa-chevron-left fa-5x" aria-hidden="true"></i>
-          </a>
-          <a class="js-offcanvas-trigger" data-offcanvas-trigger="right" href="#right" id="right_menu">
-            <i class="fa fa-chevron-right fa-5x" aria-hidden="true"></i>
-          </a>
-          <a class="js-offcanvas-trigger" data-offcanvas-trigger="top" href="#top" id="top_menu">
-            <i class="fa fa-chevron-up fa-5x" aria-hidden="true"></i>
-          </a>
-          <a class="js-offcanvas-trigger" data-offcanvas-trigger="bottom" href="#bottom" id="bottom_menu">
-            <i class="fa fa-chevron-down fa-5x" aria-hidden="true"></i>
-          </a>
-        </div>
-
-  		</main>
-
-  		<aside class="js-offcanvas" id="left" role="complementary"></aside>
-
-  		<aside class="js-offcanvas" id="right" role="complementary" data-offcanvas-options='{"modifiers":"right,fixed,overlay","modal":true}'>
-      <!-- <aside class="js-offcanvas" data-offcanvas-options='{"modifiers":"right,reveal","modal":false,"resize":false}' id="right" role="complementary"> -->
-  			<!-- <input> -->
-  			<!-- <button class="js-offcanvas-close" data-button-options='{"modifiers":"m1,m2"}'>Close</button> -->
-  		</aside>
-
-  		<aside class="js-offcanvas" data-offcanvas-options='{"modifiers":"top,fixed,overlay"}' id="top" role="complementary">
-  			<input>
-  			<button class="js-offcanvas-close" data-button-options='{"modifiers":"m1,m2"}'>Close</button>
-  		</aside>
-  		<aside class="js-offcanvas" data-offcanvas-options='{"modifiers":"bottom,fixed,overlay"}' id="bottom" role="complementary">
-  			<input>
-  			<button class="js-offcanvas-close" data-button-options='{"modifiers":"m1,m2"}'>Close</button>
-  		</aside>
-
-      <div id="clock"></div>
-
-
-      <div id="htmlTarget" class="hide">
-        <div id="emoji">〠</div>
-        <div id="target">
-          <h1>HELLO<span>★</span></h1>
-          <span id="pre">A</span>
-        </div>
-      </div>
-
-  </body>
+</body>
 </html>
