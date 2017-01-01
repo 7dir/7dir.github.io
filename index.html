@@ -15,6 +15,16 @@
 
 <div id='map'></div>
 <script>
+navigator.geolocation.watchPosition(
+  function(position) {
+    var long = position.coords.longitude;
+    var lat = position.coords.latitude;
+    console.log(long);console.log(lat);
+//     map.setCenter([long, lat]);
+  },
+  console.error.bind(console),
+  {enableHighAccuracy: true}
+);    
     mapboxgl.accessToken = 'pk.eyJ1IjoiamVzc3RlbGZvcmQiLCJhIjoiY2l3M3d6OTlrMDA0aTJ6cXNraHByMzdiZyJ9.MAfasjh0CP0D6_OHAYAGaw';
     var map = new mapboxgl.Map({
     container: 'map', // container id
@@ -23,15 +33,50 @@
     zoom: 9 // starting zoom
 });
 
-navigator.geolocation.watchPosition(
-  function(position) {
-    var long = position.coords.longitude;
-    var lat = position.coords.latitude;
-    map.setCenter([long, lat]);
-  },
-  console.error.bind(console),
-  {enableHighAccuracy: true}
-);
+    map.on('load', function () {
+    map.addSource("points", {
+        "type": "geojson",
+        "data": {
+            "type": "FeatureCollection",
+            "features": [{
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [-77.03238901390978, 38.913188059745586]
+                },
+                "properties": {
+                    "title": "Mapbox DC",
+                    "icon": "monument"
+                }
+            }, {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [-122.414, 37.776]
+                },
+                "properties": {
+                    "title": "Mapbox SF",
+                    "icon": "harbor"
+                }
+            }]
+        }
+    });
+
+    map.addLayer({
+        "id": "points",
+        "type": "symbol",
+        "source": "points",
+        "layout": {
+            "icon-image": "{icon}-15",
+            "text-field": "{title}",
+            "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+            "text-offset": [0, 0.6],
+            "text-anchor": "top"
+        }
+    });
+});
+    
+
 </script>
 
 </body>
