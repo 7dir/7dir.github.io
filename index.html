@@ -15,16 +15,6 @@
 
 <div id='map'></div>
 <script>
-navigator.geolocation.watchPosition(
-  function(position) {
-    var long = position.coords.longitude;
-    var lat = position.coords.latitude;
-    console.log(long);console.log(lat);
-//     map.setCenter([long, lat]);
-  },
-  console.error.bind(console),
-  {enableHighAccuracy: true}
-);    
     mapboxgl.accessToken = 'pk.eyJ1IjoiamVzc3RlbGZvcmQiLCJhIjoiY2l3M3d6OTlrMDA0aTJ6cXNraHByMzdiZyJ9.MAfasjh0CP0D6_OHAYAGaw';
     var map = new mapboxgl.Map({
     container: 'map', // container id
@@ -53,7 +43,7 @@ navigator.geolocation.watchPosition(
                 "type": "Feature",
                 "geometry": {
                     "type": "Point",
-                    "coordinates": [long-1.4, lat-7.76]
+                    "coordinates": [1.4, 1.76]
                 },
                 "properties": {
                     "title": "Заводь SF",
@@ -76,7 +66,18 @@ navigator.geolocation.watchPosition(
         }
     });
 });
-    
+
+    navigator.geolocation.watchPosition(
+  function(position) {
+    var long = position.coords.longitude;
+    var lat = position.coords.latitude;
+    console.log(long);console.log(lat);
+    map.setCenter([long, lat]);
+  },
+  console.error.bind(console),
+  {enableHighAccuracy: true}
+);    
+
 
 </script>
 
