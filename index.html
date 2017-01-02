@@ -33,7 +33,7 @@
                 "type": "Feature",
                 "geometry": {
                     "type": "Point",
-                    "coordinates": [-77.03238901390978, 38.913188059745586]
+                    "coordinates": [77.03238901390978, 38.913188059745586]
                 },
                 "properties": {
                     "title": "Беседка на набережной",
@@ -67,7 +67,30 @@
     });
 });
 
-    navigator.geolocation.watchPosition(
+map.on('load', function() {
+    map.addLayer({
+        'id': '3d-buildings',
+        'source': 'composite',
+        'source-layer': 'building',
+        'filter': ['==', 'extrude', 'true'],
+        'type': 'fill-extrusion',
+        'minzoom': 15,
+        'paint': {
+            'fill-extrusion-color': '#aaa',
+            'fill-extrusion-height': {
+                'type': 'identity',
+                'property': 'height'
+            },
+            'fill-extrusion-base': {
+                'type': 'identity',
+                'property': 'min_height'
+            },
+            'fill-extrusion-opacity': .6
+        }
+    });
+});
+    
+navigator.geolocation.watchPosition(
   function(position) {
     var long = position.coords.longitude;
     var lat = position.coords.latitude;
