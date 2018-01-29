@@ -1,134 +1,225 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <meta charset='utf-8' />
-    <title></title>
-    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.29.0/mapbox-gl.js'></script>
-    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.29.0/mapbox-gl.css' rel='stylesheet' />
-    <style>
-        body { margin:0; padding:0; }
-        #map { position:absolute; top:0; bottom:0; width:100%; }
-        
-    #info {
-        display: block;
-        position: relative;
-        margin: 0px auto;
-        width: 50%;
-        padding: 10px;
-        border: none;
-        border-radius: 3px;
-        font-size: 12px;
-        text-align: center;
-        color: #222;
-        background: #fff;
-    }
-        
-        
-    </style>
+  <title>7dir</title>
+  <meta charset="utf-8">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+  <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
+  <style>
+    
+.headline2 {
+  color: darkred;
+  text-align: right;
+  top: .3em;
+  position: absolute;
+  right: 1em;
+ }
+
+.subheading {
+  padding-top: 3em !important;
+}
+
+  </style>
 </head>
 <body>
-<pre id='info'></pre>
+ <div id="app">
+  <v-app light>
+    <v-content>
+      <v-container>
+        <v-layout row wrap align-center>
+          <v-flex xs12 md4>
+            <div class="text-xs-center">
+              <v-avatar size="125px">
+                <img
+                  class="img-circle elevation-7 mb-1"
+                  src="https://raw.githubusercontent.com/vuetifyjs/docs/dev/static/doc-images/lists/1.jpg"
+                >
+              </v-avatar>
 
-<div id='map'></div>
-<script>
-    mapboxgl.accessToken = 'pk.eyJ1IjoiamVzc3RlbGZvcmQiLCJhIjoiY2l3M3d6OTlrMDA0aTJ6cXNraHByMzdiZyJ9.MAfasjh0CP0D6_OHAYAGaw';
-    var map = new mapboxgl.Map({
-    container: 'map', // container id
-    style: 'mapbox://styles/mapbox/streets-v9', //stylesheet location
-//     center: [-74.50, 40], // starting position
-    center: [25, 60], // starting position
-    zoom: 11 // starting zoom
-});
+              <!-- <div class="headline">Компьютерный <span style="font-weight:bold">Маньяк</span></div> -->
 
-    map.on('load', function () {
-    map.addSource("points", {
-        "type": "geojson",
-        "data": {
-            "type": "FeatureCollection",
-            "features": [{
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [127.51806616036646, 50.25625735450669]
-                },
-                "properties": {
-                    "title": "Беседка на набережной",
-                    "icon": "monument"
-                }
-            }, {
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [128.4, 51.76]
-                },
-                "properties": {
-                    "title": "Заводь SF",
-                    "icon": "harbor"
-                }
-            }]
-        }
-    });
+              <div class="subheading text-xs-center grey--text pt-1 pb-3">
+                <!-- <div id="editor"> -->
+                  <!-- <textarea :value="input" @input="update"></textarea> -->
+                  <div v-html="compiledMarkdown"></div>
+                <!-- </div> -->
+              </div>
+<!-- 
+              <v-layout justify-space-between>
+                <a href="javascript:;" class="body-2">Home</a>
+                <a href="javascript:;" class="body-2">About</a>
+                <a href="javascript:;" class="body-2">Github</a>
+                <a href="javascript:;" class="body-2">Other</a>
+              </v-layout>
+               -->
+            </div>
+          </v-flex>
+          <v-flex xs12 md5 offset-md2>
+            <div v-for="post in posts" :key="post.title">
+              <v-card class="my-3" hover>
+                <v-card-media
+                  class="white--text"
+                  height="170px"
+                  :src="post.imgUrl"
+                >
+                  <v-container fill-height fluid>
+                    <v-layout>
+                      <v-flex xs12 align-end d-flex>
+                        <span class="headline">{{post.title}}</span>
+                      </v-flex>
+                    </v-layout>
+                  </v-container>
+                </v-card-media>
+                <v-card-text>
+                  {{post.content}}
+                </v-card-text>
+                <v-card-actions>
+<!-- 
+                  <v-btn icon class="red--text">
+                    <v-icon medium>fa-reddit</v-icon>
+                  </v-btn>
+                  <v-btn icon class="light-blue--text">
+                    <v-icon medium>fa-twitter</v-icon>
+                  </v-btn>
+                  <v-btn icon class="blue--text text--darken-4">
+                    <v-icon medium>fa-facebook</v-icon>
+                  </v-btn>
+ -->
+                  <v-spacer></v-spacer>
+                  <v-btn flat class="blue--text" @click.stop="dialog2 = true">{{post.more}}</v-btn>
+                </v-card-actions>
+              </v-card>
+            </div>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-content>
+    <v-footer class="secondary" app>
+      <v-layout row wrap align-center>
+        <v-flex xs12>
+          <div class="white--text ml-3">
+              <!-- <button v-on:click="addf">В закладки <v-icon class="red--text" >favorite</v-icon></button> -->
+             +7-962-284-13-31 © 2018
+            
+          </div>
+        </v-flex>
+      </v-layout>
+    </v-footer>
 
-    map.addLayer({
-        "id": "points",
-        "type": "symbol",
-        "source": "points",
-        "layout": {
-            "icon-image": "{icon}-15",
-            "text-field": "{title}",
-            "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
-            "text-offset": [0, 0.6],
-            "text-anchor": "top"
-        }
-    });
-});
+      <v-dialog v-model="dialog2" max-width="500px">
+        <v-card>
+          <v-card-title class="headline">
+            <v-icon>phone</v-icon> +7-962-284-13-31
+          </v-card-title>
+          <v-card-text class="dia">
+                    <p>
+                      Звоните! <br>
+                    <br>
+                      Обсудим, смоги ли Я быть Вам полезен.
+                    </p>
+                    <blockquote>
+Извините, но материалы доступны после знакомства!
+                    </blockquote>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="primary" flat @click.stop="dialog2=false">Ок</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
 
-map.on('load', function() {
-    map.addLayer({
-        'id': '3d-buildings',
-        'source': 'composite',
-        'source-layer': 'building',
-        'filter': ['==', 'extrude', 'true'],
-        'type': 'fill-extrusion',
-        'minzoom': 15,
-        'paint': {
-            'fill-extrusion-color': '#aaa',
-            'fill-extrusion-height': {
-                'type': 'identity',
-                'property': 'height'
-            },
-            'fill-extrusion-base': {
-                'type': 'identity',
-                'property': 'min_height'
-            },
-            'fill-extrusion-opacity': .6
-        }
-    });
-});
-    
-navigator.geolocation.watchPosition(
-  function(position) {
-    var long = position.coords.longitude;
-    var lat = position.coords.latitude;
-    console.log(long);console.log(lat);
-    map.setCenter([long, lat]);
-  },
-  console.error.bind(console),
-  {enableHighAccuracy: true}
-);    
 
-    map.on('mousemove', function (e) {
-    document.getElementById('info').innerHTML =
-        // e.point is the x, y coordinates of the mousemove event relative
-        // to the top-left corner of the map
-        JSON.stringify(e.point) + '<br />' +
-            // e.lngLat is the longitude, latitude geographical position of the event
-        JSON.stringify(e.lngLat);
-});
-    
+  </v-app>
+ </div>
+ <script src="https://unpkg.com/jquery"></script>
+ <script src="https://unpkg.com/vue/dist/vue.js"></script>
+ <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+ <script src="https://use.fontawesome.com/73c8e2621d.js"></script>
+<script src="https://unpkg.com/marked@0.3.6"></script>
+<script src="https://unpkg.com/lodash@4.16.0"></script>
 
-</script>
+ <script>
+  var intro = `
+Преподаватель
+Физик
+Информатик
 
+
+Поэт
+Системщик
+Программист
+
+Творец
+Трехмерного пространства
+
+
+Дурак
+Мечтатель
+Оптимист
+`;
+   new Vue({
+    el: '#app',
+    data () {
+      return {
+        title: 'Mike',
+        dialog2: false,
+        posts: [
+          {
+            title: 'На старт.',
+            content: `Знакомство, краткий анализ бизнеса.
+Презентация разработок, последние технологии.
+Творческий индивидуальный подход - создание прототипа.
+Утверждение промежуточных сроков. Подписание.`,
+            imgUrl: 'https://raw.githubusercontent.com/vuetifyjs/docs/dev/static/doc-images/cards/space.jpg',
+            more: 'Поехали!'
+          },
+          {
+            title: 'Технологические колючки - как быть?',
+            content: `Описание бизнес процессов IDFE0, BPMN, Canvas.
+Мобильные приложения, виртуальная и дополненая реальность VR-AR.
+Системы дистанционное обучения LMS, Интернет магазины, Визитки. 
+`,
+            imgUrl: 'https://raw.githubusercontent.com/vuetifyjs/docs/dev/static/doc-images/cards/sunshine.jpg',
+            more: 'мой взгляд'
+          },
+          {
+            title: 'Научные труды',
+            content: `Кинезеологический комплекс упражнений развития мозговой активности.
+Интерактивные псевдо-игровые программы в образовании и медицине.
+Информационная безопасность в 21 веке: угрозы, возможности.`,
+            imgUrl: 'https://raw.githubusercontent.com/vuetifyjs/docs/dev/static/doc-images/cards/nature.jpg',
+            more: 'Статьи'
+          }
+        ]
+      }
+    },
+    computed: {
+      compiledMarkdown: function () {
+        return marked(intro, { sanitize: false })
+      }
+    },
+    methods: {
+      addf: function addToFavorites(url, name) { 
+    // if (window.sidebar) { // Mozilla Firefox 
+    //     window.sidebar.addPanel(name, url, ""); 
+    // } else if (window.external) { // IE 
+    //     // window.external.AddFavorite(url, name); 
+    // } else if (window.opera && window.print) { 
+    //     window.external.AddFavorite(url, name); 
+    // } else { 
+    //     alert("Sorry! Your browser doesn't appear to support this function."); 
+    // } 
+} ,
+      update: _.debounce(function (e) {
+        this.input = e.target.value
+      }, 3000)
+    }
+  })
+
+$('#app > div > div > main > div > div > div.flex.xs12.md5.offset-md2 > div:nth-child(3) > div > div.white--text.card__media > div.card__media__content > div > div > div > span').addClass('headline2');
+
+
+ </script>
 </body>
 </html>
